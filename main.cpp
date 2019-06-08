@@ -1,4 +1,4 @@
-#include <bits/stdc++.h>
+﻿#include <bits/stdc++.h>
 using namespace std;
 
 string TOTWO_DECIMAL(double A);
@@ -27,7 +27,7 @@ string REVERSE_BIT_PLUS_ONE(string A){
 
     return A;
 }
-//10->2,unsigned,整数
+//10->2,unsigned,����
 string TOTWO(int A, int BIT = 0){
     if(BIT == 0){
         string R = "";
@@ -87,7 +87,7 @@ string TOSIXTEEN(string TWO){
     reverse(RES.begin(), RES.end());
     return RES;
 }
-//10->2,signed,整数
+//10->2,signed,����
 string TOTWO_WITH_SIGN(int A,int BIT = 0, bool comp = 0){
     if(A < 0){
       if(!comp){
@@ -137,7 +137,7 @@ string TOTWO_DECIMAL(double A){
 
     return R;
 }
-//10->,signed,小数
+//10->,signed,����
 string TOTWO_WITH_DOT_SIGN(double A,int BIT = 0, bool comp = 0){
     if(!isInt(A)){
         return TOTWO_WITH_SIGN((int)A, BIT, comp) + "." + TOTWO_DECIMAL(A - (int)A);
@@ -173,11 +173,6 @@ string TOSIXTEEN_WITH_DOT_SIGN(string TWO){
     if(find(TWO.begin(),TWO.end(),'.') != TWO.end()){
         auto dot = find(TWO.begin(), TWO.end(), '.');
 
-        vector<char> INT_PART_V(TWO.size());
-        vector<char> DEC_PART_V(TWO.size());
-        copy(TWO.begin(), dot, INT_PART_V.begin());
-        copy(dot+1, TWO.end(), DEC_PART_V.begin());
-
         string INT_PART = TWO.substr(0,dot - TWO.begin());
         string DEC_PART = TWO.substr(dot - TWO.begin() + 1,TWO.end() - dot + 1);
 
@@ -188,16 +183,64 @@ string TOSIXTEEN_WITH_DOT_SIGN(string TWO){
     }
 }
 
+int TWOTOTEN(string TWO){
+  int R = 0;
+  reverse(TWO.begin(), TWO.end());
+  for(int i = 0; i < TWO.size(); i++){
+    if(TWO[i] == '1')
+      R += pow(2,i);
+  }
+  return R;
+}
+
+int TWOTOTEN_COMP(string TWO,bool comp = 0){
+  if(comp && *(TWO.begin()) == '1'){
+    return -TWOTOTEN(REVERSE_BIT_PLUS_ONE(TWO));
+  }
+  else{
+    return TWOTOTEN(TWO);
+  }
+}
+
+double TWOTOTEN_DECIMAL(string DEC){
+  double R = 0;
+  for(int i = 1; i <= DEC.size(); i++){
+    if(DEC[i-1] == '1'){
+      R += pow(0.5,i);
+    }
+  }
+  return R;
+}
+
+double TWOTOTEN_DOT(string TWO, bool comp = 0){
+  if(find(TWO.begin(),TWO.end(), '.') != TWO.end()){
+        auto dot = find(TWO.begin(), TWO.end(), '.');
+
+        string INT_PART = TWO.substr(0,dot - TWO.begin());
+        string DEC_PART = TWO.substr(dot - TWO.begin() + 1,TWO.end() - dot + 1);
+
+        return TWOTOTEN_COMP(INT_PART,comp) + TWOTOTEN_DECIMAL(DEC_PART);
+  }
+  else{
+    return TWOTOTEN_COMP(TWO,comp);
+  }
+}
+
 void SHOW(double A, int BIT = 0){
     string t = TOTWO_WITH_DOT_SIGN(A, BIT, 1);
     cout << A << "(10) = " << t << "(2)" << endl;
     cout << A << "(10) = " << TOSIXTEEN_WITH_DOT_SIGN(t) << "(16)" << endl;
 }
 
+void SHOW_TOTEN(string A, bool comp = 0){
+  cout << A << "(2) = " << TWOTOTEN_DOT(A,comp) << "(10)" << endl;
+}
+
 int main(){
     while(1){
-        double A;
-        cin >> A;
-        SHOW(A, 16);
+        string A;
+        bool c;
+        cin >> A >> c;
+        SHOW_TOTEN(A,c);
     }
 }
